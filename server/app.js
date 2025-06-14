@@ -1,13 +1,27 @@
-const express = require('express')
-const app = express()
+import express from "express";
+import authRouter from "./routes/auth.js";
+import interviewRouter from "./routes/interview.js";
+import videoAnalyzeRouter from "./routes/videoAnalyze.js";
+import whisperRouter from "./routes/whisper.js";
+import db from "./config/db.js";
 
-const port = 3000
+import dotenv from "dotenv";
 
-app.get("/", (req, res) => {
-  res.send("Hello, world!");
-});
+dotenv.config();
 
-// Start the server
-app.listen(port, () => {
-  console.log(`Server is listening at http://localhost:${port}`);
-});
+db();
+
+const app = express();
+
+app.use(express.json());
+
+// Routes
+app.use('/api/auth', authRouter);
+app.use('/api/interview', interviewRouter);
+app.use('/api/videoAnalyze', videoAnalyzeRouter);
+app.use('/api/whisper', whisperRouter);
+
+const port = process.env.PORT || 5000;
+
+app.listen(port, () => console.log(`Server listening on port ${port}.`));
+
